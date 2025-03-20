@@ -34,7 +34,7 @@ function extractButtonUrl(button) {
 }
 
 function extractTitleFromButtonWithTemplate(button) {
-    return button.textContent.match(/templateLink=(.*)/)[0].trim();
+    return button.textContent.match(/(.*)templateLink/)[1].replace('(', '').trim();
 }
 
 function extractButtonTitle(button) {
