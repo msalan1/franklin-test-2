@@ -12,7 +12,7 @@ function extractLinkFromTemplate(button) {
     const matchingRuleKeys = Object.keys(valueMap).join('|');
     const matchingRule = new RegExp(`(?:${matchingRuleKeys})`, 'g');
   
-    const matches = [...template.matchAll(matchingRule)];
+    const matches = [...templateLink.matchAll(matchingRule)];
     // Check for matches relying on a dependency which isn't available (undefined, empty string etc.)
     if (matches.length > 0 && matches.some(match => !valueMap[match[0]])) {
       return '';
