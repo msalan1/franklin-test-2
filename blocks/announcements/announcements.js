@@ -74,9 +74,6 @@ function extractAnnouncements(block) {
 }
 
 export default function decorate(block) {
-    window.addEventListener('message', (evt) => {
-        console.log('Received message:', evt); 
-    });
   // Add a container class for styling
   block.classList.add('announcements-container');
 
