@@ -106,24 +106,7 @@ export default function decorate(block) {
     content.appendChild(actionButtonWrapper);
     content.classList.add('announcement-content');
     
-    // Add a close button
-    const closeButton = document.createElement('button');
-    closeButton.classList.add('announcement-close');
-    closeButton.setAttribute('aria-label', 'Close announcement');
-    closeButton.innerHTML = '×';
-    
-    closeButton.addEventListener('click', () => {
-    row.classList.add('announcement-hidden');
-    // Optional: Store in localStorage that this announcement was closed
-    localStorage.setItem(`announcement-${index}-closed`, 'true');
-    });
-    
-    content.appendChild(closeButton);
-    
-    // Check if this announcement was previously closed
-    if (localStorage.getItem(`announcement-${index}-closed`) === 'true') {
-      row.classList.add('announcement-hidden');
-    }
+
       block.appendChild(content);
   });
 } 
