@@ -88,15 +88,20 @@ export default function decorate(block) {
     const content = document.createElement('div');
     const title = document.createElement('h3');
     title.innerHTML = row.title;
+    content.appendChild(title);
     const description = document.createElement('div');
     description.innerHTML = row.description;
+    content.appendChild(description);
+    const actionButtonWrapper = document.createElement('div');
     const primaryButton = document.createElement('a');
     primaryButton.innerHTML = row.primaryButton.title;
     primaryButton.href = row.primaryButton.url;
+    actionButtonWrapper.appendChild(primaryButton);
     const secondaryButton = document.createElement('a');
     secondaryButton.innerHTML = row.secondaryButton.title;
     secondaryButton.href = row.secondaryButton.url;
-
+    actionButtonWrapper.appendChild(secondaryButton);
+    content.appendChild(actionButtonWrapper);
     content.classList.add('announcement-content');
     
     // Add a close button
