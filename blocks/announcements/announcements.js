@@ -80,13 +80,10 @@ export default function decorate(block) {
   // Get all announcement rows
   const announcements = extractAnnouncements(block);
 
+  block.innerHTML = '';
+
   // Convert each row into an announcement
   announcements.forEach((row, index) => {
-    row.classList.add('announcement');
-    
-    // Add announcement number for styling/targeting
-    row.dataset.announcementIndex = index;
-
     // Get the content div (should be the first and only child)
     const content = document.createElement('div');
     const title = document.createElement('h3');
@@ -120,5 +117,6 @@ export default function decorate(block) {
     if (localStorage.getItem(`announcement-${index}-closed`) === 'true') {
       row.classList.add('announcement-hidden');
     }
+      block.appendChild(content);
   });
 } 
