@@ -96,10 +96,12 @@ export default function decorate(block) {
     const primaryButton = document.createElement('a');
     primaryButton.innerHTML = row.primaryButton.title;
     primaryButton.href = row.primaryButton.url;
+    primaryButton.target = '_blank';
     actionButtonWrapper.appendChild(primaryButton);
     const secondaryButton = document.createElement('a');
     secondaryButton.innerHTML = row.secondaryButton.title;
     secondaryButton.href = row.secondaryButton.url;
+    secondaryButton.target = '_blank';
     actionButtonWrapper.appendChild(secondaryButton);
     content.appendChild(actionButtonWrapper);
     content.classList.add('announcement-content');
