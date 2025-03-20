@@ -4,7 +4,8 @@ function hasTemplateLink(button) {
 }
 function extractLinkFromTemplate(button) {
     const experienceDomainLink = 'https://experience-qa.adobe.com';
-    const templateLink = button.textContent.match(/templateLink=(.*)/)[1];
+    const templateLink = button.textContent.match(/templateLink:(.*)/)[1].trim().replace(')', '');
+    
     const valueMap = {
         '{experienceLink}': experienceDomainLink
     };
