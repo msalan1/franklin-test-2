@@ -52,10 +52,10 @@ function extractButtonTitle(button) {
 function extractAnnouncements(block) {
     const announcements = [...block.children];
     const identifiedAnnouncements = announcements.map((announcementRow) => {
-        const title = announcementRow.querySelector('div:first-of-type > h3');
-        const description = announcementRow.querySelector('div:first-of-type > :not(h3)');
-        const primaryButton = announcementRow.querySelector('div:last-of-type > :first-of-type');
-        const secondaryButton = announcementRow.querySelector('div:last-of-type > :nth-of-type(2)');
+        const title = announcementRow.querySelector('div > div:first-of-type > h3');
+        const description = announcementRow.querySelector('div > div:first-of-type > :not(h3)');
+        const primaryButton = announcementRow.querySelector('div > div:last-of-type > p:first-of-type');
+        const secondaryButton = announcementRow.querySelector('div > div:last-of-type > p:nth-of-type(2)');
 
         return {
             title: title?.textContent ?? '',
