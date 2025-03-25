@@ -80,7 +80,7 @@ export default function decorate(block) {
         "message",
         (event) => {
             event.preventDefault();
-            if (!event.experienceLink && event.origin !== 'https://experience-qa.adobe.com/' && event.origin !== 'https://localhost.corp.adobe.com:8013') {
+            if (!event.data.experienceLink && event.origin !== 'https://experience-qa.adobe.com/' && event.origin !== 'https://localhost.corp.adobe.com:8013') {
                 return;
             }
 
