@@ -79,6 +79,10 @@ export default function decorate(block) {
     window.addEventListener(
         "message",
         (event) => {
+            if (event.origin !== 'https://experience-qa.adobe.com/') {
+                return;
+            }
+
             console.log(event);
             const data = event.data;
             console.log('Data', data.experienceLink);
