@@ -1,79 +1,42 @@
-.announcements-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.announcement {
-  background-color: #f8f9fa;
-  border-left: 4px solid #0066cc;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  padding: 16px;
-  position: relative;
-  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-}
-
-.announcement:hover {
-  background-color: #f0f1f2;
-}
-
 .announcement-content {
-  padding-right: 40px; /* Space for close button */
-  line-height: 1.5;
-}
+    border: none;
+    border-bottom: 1px solid #000;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
 
-.announcement-content p {
-  margin: 0;
-}
+    > div:first-of-type {
+        width: 33%;
+        max-width: 200px;
+    }
 
-.announcement-close {
-  background: none;
-  border: none;
-  color: #666;
-  cursor: pointer;
-  font-size: 24px;
-  line-height: 1;
-  padding: 8px;
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: color 0.2s ease;
-}
+    > div:nth-of-type(2) {
+        flex: 1;
+        padding-left: 10px;
+        font-size: 1rem;
+        
+        h3 {
+            font-size: 1.5rem;
+        }
 
-.announcement-close:hover {
-  color: #333;
-}
+        .action-button-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
 
-.announcement-hidden {
-  display: none;
-}
+            a {
+                padding: 7px 14px;
+                border-radius: 30px;
 
-/* Different colors for different types of announcements */
-.announcement[data-announcement-index="0"] {
-  border-left-color: #0066cc; /* Info blue */
-}
+                &:hover {
+                    text-decoration: none;
+                }
+            }
 
-.announcement[data-announcement-index="1"] {
-  border-left-color: #28a745; /* Success green */
+            .primary-button {
+                background-color: #000;
+                color: #fff;
+            }
+        }
+    }
 }
-
-.announcement[data-announcement-index="2"] {
-  border-left-color: #ffc107; /* Warning yellow */
-}
-
-.announcement[data-announcement-index="3"] {
-  border-left-color: #dc3545; /* Danger red */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .announcements-container {
-    padding: 10px;
-  }
-  
-  .announcement {
-    padding: 12px;
-  }
-} 

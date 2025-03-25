@@ -33,10 +33,6 @@ function extractButtonUrl(button) {
     return '';
 }
 
-function testFunction() {
-    console.log('testFunction');
-}
-
 function extractTitleFromButtonWithTemplate(button) {
     return button.textContent.match(/(.*)templateLink/)[1].replace('(', '').trim();
 }
@@ -56,28 +52,31 @@ function extractButtonTitle(button) {
 function extractAnnouncements(block) {
     const announcements = [...block.children];
     const identifiedAnnouncements = announcements.map((announcementRow) => {
-        const title = announcementRow.querySelector('div > div:first-of-type > h3');
-        const description = announcementRow.querySelector('div > div:first-of-type > :not(h3)');
+        const image = announcementRow.querySelector('div > div:first-of-type > picture');
+        const title = announcementRow.querySelector('div > div:nth-of-type(2) > h3');
+        const description = announcementRow.querySelector('div > div:nth-of-type(2) > :not(h3)');
         const primaryButton = announcementRow.querySelector('div > div:last-of-type > p:first-of-type');
         const secondaryButton = announcementRow.querySelector('div > div:last-of-type > p:nth-of-type(2)');
 
         return {
+            image: image?.innerHTML ?? '',
             title: title?.textContent ?? '',
             description: description?.textContent ?? '',
-            primaryButton: {
+            primaryButton: primaryButton ? {
                 title: extractButtonTitle(primaryButton),
                 url: extractButtonUrl(primaryButton)
-            },
-            secondaryButton: {
+            } : null,
+            secondaryButton: secondaryButton ? {
                 title: extractButtonTitle(secondaryButton),
                 url: extractButtonUrl(secondaryButton)
-            }
+            } : null
         }
     });
     return identifiedAnnouncements;
 }
 
 export default function decorate(block) {
+    console.log(block);
   // Add a container class for styling
   block.classList.add('announcements-container');
 
@@ -89,28 +88,42 @@ export default function decorate(block) {
   // Convert each row into an announcement
   announcements.forEach((row, index) => {
     // Get the content div (should be the first and only child)
-    const content = document.createElement('div');
+    const announcementContentWrapper = document.createElement('div');
+    const announcementImage = document.createElement('div');
+    announcementImage.innerHTML = row.image;
+    announcementContentWrapper.appendChild(announcementImage);
+    const announcementContent = document.createElement('div');
     const title = document.createElement('h3');
     title.innerHTML = row.title;
-    content.appendChild(title);
-    const description = document.createElement('div');
+    announcementContent.appendChild(title);
+    const description = document.createElement('p');
     description.innerHTML = row.description;
-    content.appendChild(description);
-    const actionButtonWrapper = document.createElement('div');
-    const primaryButton = document.createElement('a');
-    primaryButton.innerHTML = row.primaryButton.title;
-    primaryButton.href = row.primaryButton.url;
-    primaryButton.target = '_blank';
-    actionButtonWrapper.appendChild(primaryButton);
-    const secondaryButton = document.createElement('a');
-    secondaryButton.innerHTML = row.secondaryButton.title;
-    secondaryButton.href = row.secondaryButton.url;
-    secondaryButton.target = '_blank';
-    actionButtonWrapper.appendChild(secondaryButton);
-    content.appendChild(actionButtonWrapper);
-    content.classList.add('announcement-content');
+    announcementContent.appendChild(description);
+
+    if (row.primaryButton || row.secondaryButton) {
+        const actionButtonWrapper = document.createElement('div');
+        actionButtonWrapper.classList.add('action-button-wrapper');
+        if (row.primaryButton) {
+            const primaryButton = document.createElement('a');
+            primaryButton.innerHTML = row.primaryButton.title;
+            primaryButton.href = row.primaryButton.url;
+            primaryButton.target = '_blank';
+            primaryButton.classList.add('primary-button');
+            actionButtonWrapper.appendChild(primaryButton);
+        }
+        if (row.secondaryButton) {
+            const secondaryButton = document.createElement('a');
+            secondaryButton.innerHTML = row.secondaryButton.title;
+            secondaryButton.href = row.secondaryButton.url;
+            secondaryButton.target = '_blank';
+            actionButtonWrapper.appendChild(secondaryButton);
+        }
+        announcementContent.appendChild(actionButtonWrapper);
+    }
+    announcementContentWrapper.appendChild(announcementContent);
+    announcementContentWrapper.classList.add('announcement-content');
     
 
-      block.appendChild(content);
+      block.appendChild(announcementContentWrapper);
   });
 } 
