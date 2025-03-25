@@ -52,16 +52,16 @@ function extractButtonTitle(button) {
 function extractAnnouncements(block) {
     const announcements = [...block.children];
     const identifiedAnnouncements = announcements.map((announcementRow) => {
-        const image = announcementRow.querySelector('div > div:first-of-type > picture');
-        const title = announcementRow.querySelector('div > div:nth-of-type(2) > h3');
-        const description = announcementRow.querySelector('div > div:nth-of-type(2) > :not(h3)');
-        const primaryButton = announcementRow.querySelector('div > div:last-of-type > p:first-of-type');
-        const secondaryButton = announcementRow.querySelector('div > div:last-of-type > p:nth-of-type(2)');
+        const image = announcementRow.querySelector(':scope > div:first-of-type > picture');
+        const title = announcementRow.querySelector(':scope > div:nth-of-type(2) > h3');
+        const description = announcementRow.querySelectorAll(':scope > div:nth-of-type(2) > :not(h3)');
+        const primaryButton = announcementRow.querySelector(':scope > div:last-of-type > p:first-of-type');
+        const secondaryButton = announcementRow.querySelector(':scope > div:last-of-type > p:nth-of-type(2)');
 
         return {
             image: image?.innerHTML ?? '',
             title: title?.textContent ?? '',
-            description: description?.textContent ?? '',
+            description: description ?? '',
             primaryButton: primaryButton ? {
                 title: extractButtonTitle(primaryButton),
                 url: extractButtonUrl(primaryButton)
@@ -76,7 +76,6 @@ function extractAnnouncements(block) {
 }
 
 export default function decorate(block) {
-    console.log(block);
   // Add a container class for styling
   block.classList.add('announcements-container');
 
@@ -96,9 +95,13 @@ export default function decorate(block) {
     const title = document.createElement('h3');
     title.innerHTML = row.title;
     announcementContent.appendChild(title);
-    const description = document.createElement('p');
-    description.innerHTML = row.description;
-    announcementContent.appendChild(description);
+    const descriptionWrapper = document.createElement('div');
+    row.description.forEach(item => {
+        const description = document.createElement('p');
+        description.innerHTML = item.innerHTML;
+        descriptionWrapper.appendChild(description);
+    });
+    announcementContent.appendChild(descriptionWrapper);
 
     if (row.primaryButton || row.secondaryButton) {
         const actionButtonWrapper = document.createElement('div');
