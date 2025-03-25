@@ -33,6 +33,10 @@ function extractButtonUrl(button) {
     return '';
 }
 
+function testFunction() {
+    console.log('testFunction');
+}
+
 function extractTitleFromButtonWithTemplate(button) {
     return button.textContent.match(/(.*)templateLink/)[1].replace('(', '').trim();
 }
