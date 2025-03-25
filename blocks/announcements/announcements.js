@@ -80,7 +80,10 @@ export default function decorate(block) {
         "message",
         (event) => {
             console.log(event);
-        }
+            const data = event.data;
+            console.log('Data', data.experienceLink);
+        },
+        false
     );
   // Add a container class for styling
   block.classList.add('announcements-container');
