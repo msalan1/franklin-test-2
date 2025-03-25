@@ -50,6 +50,11 @@
     }
 }
 
+.section.announcements-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 @media (min-width: 500px) {
     .announcement-content {
         flex-direction: row;
