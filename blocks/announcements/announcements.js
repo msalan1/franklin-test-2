@@ -29,7 +29,7 @@ function extractButtonUrl(button) {
     }
 
     if (hasTemplateLink(button)) {
-        return extractLinkFromTemplate(button);
+        return button.textContent;
     }
 
     return '';
@@ -105,7 +105,7 @@ function buildAnnouncements(block, data) {
         if (row.primaryButton) {
             const primaryButton = document.createElement('a');
             primaryButton.innerHTML = row.primaryButton.title;
-            primaryButton.href = row.primaryButton.url;
+            primaryButton.href = hasTemplateLink(row.primaryButton.url) ? extractLinkFromTemplate(row.primaryButton.url) : row.primaryButton.url;
             primaryButton.target = '_blank';
             primaryButton.classList.add('primary-button');
             actionButtonWrapper.appendChild(primaryButton);
@@ -113,7 +113,7 @@ function buildAnnouncements(block, data) {
         if (row.secondaryButton) {
             const secondaryButton = document.createElement('a');
             secondaryButton.innerHTML = row.secondaryButton.title;
-            secondaryButton.href = row.secondaryButton.url;
+            secondaryButton.href = hasTemplateLink(row.secondaryButton.url) ? extractLinkFromTemplate(row.secondaryButton.url) : row.secondaryButton.url;
             secondaryButton.target = '_blank';
             actionButtonWrapper.appendChild(secondaryButton);
         }
