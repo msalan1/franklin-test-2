@@ -3,8 +3,7 @@ let announcements = [];
 function hasTemplateLink(link) {
     return link.includes('templateLink');
 }
-function extractLinkFromTemplate(button, data) {
-    const templateLink = button.textContent.match(/templateLink:(.*)/)[1].trim().replace(')', '');
+function extractLinkFromTemplate(templateLink, data) {
     
     const valueMap = {
         '{experienceLink}': data.experienceLink,
