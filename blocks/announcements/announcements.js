@@ -1,7 +1,7 @@
 
 let announcements = [];
-function hasTemplateLink(button) {
-    return button.textContent.includes('templateLink');
+function hasTemplateLink(link) {
+    return link.includes('templateLink');
 }
 function extractLinkFromTemplate(button, data) {
     const templateLink = button.textContent.match(/templateLink:(.*)/)[1].trim().replace(')', '');
@@ -28,7 +28,7 @@ function extractButtonUrl(button) {
     }
 
     if (hasTemplateLink(button)) {
-        return button.textContent;
+        return button.textContent.match(/templateLink:(.*)/)[1].trim().replace(')', '');
     }
 
     return '';
