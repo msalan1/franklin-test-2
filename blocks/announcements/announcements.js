@@ -1,7 +1,7 @@
 
 let announcements = [];
-function hasTemplateLink(link) {
-    return link.includes('templateLink');
+function hasTemplateLink(button) {
+    return button.textContent.includes('templateLink');
 }
 function extractLinkFromTemplate(templateLink, data) {
     
@@ -103,7 +103,7 @@ function buildAnnouncements(block, data) {
         if (row.primaryButton) {
             const primaryButton = document.createElement('a');
             primaryButton.innerHTML = row.primaryButton.title;
-            primaryButton.href = hasTemplateLink(row.primaryButton.url) ? extractLinkFromTemplate(row.primaryButton.url, data) : row.primaryButton.url;
+            primaryButton.href = row.primaryButton.url.includes('{') ? extractLinkFromTemplate(row.primaryButton.url, data) : row.primaryButton.url;
             primaryButton.target = '_blank';
             primaryButton.classList.add('primary-button');
             actionButtonWrapper.appendChild(primaryButton);
@@ -111,7 +111,7 @@ function buildAnnouncements(block, data) {
         if (row.secondaryButton) {
             const secondaryButton = document.createElement('a');
             secondaryButton.innerHTML = row.secondaryButton.title;
-            secondaryButton.href = hasTemplateLink(row.secondaryButton.url) ? extractLinkFromTemplate(row.secondaryButton.url, data) : row.secondaryButton.url;
+            secondaryButton.href = row.secondaryButton.url.includes('{') ? extractLinkFromTemplate(row.secondaryButton.url, data) : row.secondaryButton.url;
             secondaryButton.target = '_blank';
             actionButtonWrapper.appendChild(secondaryButton);
         }
