@@ -127,6 +127,7 @@ function buildAnnouncements(block, data) {
 
 export default function decorate(block) {
     announcements = extractAnnouncements(block);
+    block.innerHTML = '';
     window.addEventListener(
         "message",
         (event) => {
