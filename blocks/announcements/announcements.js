@@ -1,4 +1,5 @@
 
+let annoucnements = {};
 function hasTemplateLink(button) {
     return button.textContent.includes('templateLink');
 }
@@ -7,7 +8,8 @@ function extractLinkFromTemplate(button) {
     const templateLink = button.textContent.match(/templateLink:(.*)/)[1].trim().replace(')', '');
     
     const valueMap = {
-        '{experienceLink}': experienceDomainLink
+        '{experienceLink}': experienceDomainLink,
+        '{programId}': programId
     };
     const matchingRuleKeys = Object.keys(valueMap).join('|');
     const matchingRule = new RegExp(`(?:${matchingRuleKeys})`, 'g');
@@ -75,29 +77,7 @@ function extractAnnouncements(block) {
     return identifiedAnnouncements;
 }
 
-export default function decorate(block) {
-    window.addEventListener(
-        "message",
-        (event) => {
-            if (!event.data.experienceLink &&
-                !event.data.programId &&
-                event.origin !== 'https://experience-qa.adobe.com/' &&
-                event.origin !== 'https://localhost.corp.adobe.com:8013') {
-                return;
-            }
-
-            console.log(event);
-            const data = event.data;
-            console.log('Data', data);
-        },
-        false
-    );
-  // Add a container class for styling
-  block.classList.add('announcements-container');
-
-  // Get all announcement rows
-  const announcements = extractAnnouncements(block);
-
+function buildAnnouncements(block, data) {
   block.innerHTML = '';
 
   // Convert each row into an announcement
@@ -144,5 +124,32 @@ export default function decorate(block) {
     
 
       block.appendChild(announcementContentWrapper);
-  });
+});
+}
+
+export default function decorate(block) {
+    window.addEventListener(
+        "message",
+        (event) => {
+            if (!event.data.experienceLink &&
+                !event.data.programId &&
+                event.origin !== 'https://experience-qa.adobe.com/' &&
+                event.origin !== 'https://localhost.corp.adobe.com:8013') {
+                return;
+            }
+
+            console.log(event);
+            const data = event.data;
+            console.log('Data', data);
+
+            buildAnnouncements(block, data);
+        },
+        false
+    );
+  // Add a container class for styling
+  block.classList.add('announcements-container');
+
+  // Get all announcement rows
+  announcements = extractAnnouncements(block);
+
 } 
