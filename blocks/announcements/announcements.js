@@ -1,15 +1,14 @@
 
-let annoucnements = {};
+annoucnements = [];
 function hasTemplateLink(button) {
     return button.textContent.includes('templateLink');
 }
-function extractLinkFromTemplate(button) {
-    const experienceDomainLink = 'https://experience-qa.adobe.com';
+function extractLinkFromTemplate(button, data) {
     const templateLink = button.textContent.match(/templateLink:(.*)/)[1].trim().replace(')', '');
     
     const valueMap = {
-        '{experienceLink}': experienceDomainLink,
-        '{programId}': programId
+        '{experienceLink}': data.experienceLink,
+        '{programId}': data.programId
     };
     const matchingRuleKeys = Object.keys(valueMap).join('|');
     const matchingRule = new RegExp(`(?:${matchingRuleKeys})`, 'g');
@@ -105,7 +104,7 @@ function buildAnnouncements(block, data) {
         if (row.primaryButton) {
             const primaryButton = document.createElement('a');
             primaryButton.innerHTML = row.primaryButton.title;
-            primaryButton.href = hasTemplateLink(row.primaryButton.url) ? extractLinkFromTemplate(row.primaryButton.url) : row.primaryButton.url;
+            primaryButton.href = hasTemplateLink(row.primaryButton.url) ? extractLinkFromTemplate(row.primaryButton.url, data) : row.primaryButton.url;
             primaryButton.target = '_blank';
             primaryButton.classList.add('primary-button');
             actionButtonWrapper.appendChild(primaryButton);
@@ -113,7 +112,7 @@ function buildAnnouncements(block, data) {
         if (row.secondaryButton) {
             const secondaryButton = document.createElement('a');
             secondaryButton.innerHTML = row.secondaryButton.title;
-            secondaryButton.href = hasTemplateLink(row.secondaryButton.url) ? extractLinkFromTemplate(row.secondaryButton.url) : row.secondaryButton.url;
+            secondaryButton.href = hasTemplateLink(row.secondaryButton.url) ? extractLinkFromTemplate(row.secondaryButton.url, data) : row.secondaryButton.url;
             secondaryButton.target = '_blank';
             actionButtonWrapper.appendChild(secondaryButton);
         }
