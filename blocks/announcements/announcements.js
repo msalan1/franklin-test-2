@@ -1,5 +1,5 @@
 
-annoucnements = [];
+announcements = [];
 function hasTemplateLink(button) {
     return button.textContent.includes('templateLink');
 }
