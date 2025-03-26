@@ -131,7 +131,7 @@ export default function decorate(block) {
         "message",
         (event) => {
             if (
-                event.origin !== 'https://experience-qa.adobe.com/' ||
+                event.origin !== 'https://experience-qa.adobe.com/' &&
                 event.origin !== 'https://localhost.corp.adobe.com:8013') {
                 return;
             }
