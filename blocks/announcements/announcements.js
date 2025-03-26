@@ -6,8 +6,8 @@ function hasTemplateLink(button) {
 function extractLinkFromTemplate(templateLink, data) {
     
     const valueMap = {
-        '{experienceLink}': data.experienceLink,
-        '{programId}': data.programId
+        '{experienceLink}': data.experienceLink ?? '',
+        '{programId}': data.programId ?? ''
     };
     const matchingRuleKeys = Object.keys(valueMap).join('|');
     const matchingRule = new RegExp(`(?:${matchingRuleKeys})`, 'g');
