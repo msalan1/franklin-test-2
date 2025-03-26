@@ -80,6 +80,7 @@ export default function decorate(block) {
         "message",
         (event) => {
             if (!event.data.experienceLink &&
+                !event.data.programId &&
                 event.origin !== 'https://experience-qa.adobe.com/' &&
                 event.origin !== 'https://localhost.corp.adobe.com:8013') {
                 return;
@@ -87,7 +88,7 @@ export default function decorate(block) {
 
             console.log(event);
             const data = event.data;
-            console.log('Data', data.experienceLink);
+            console.log('Data', data);
         },
         false
     );
