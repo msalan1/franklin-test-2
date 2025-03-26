@@ -14,7 +14,7 @@ function extractLinkFromTemplate(templateLink, data) {
   
     const matches = [...templateLink.matchAll(matchingRule)];
     // Check for matches relying on a dependency which isn't available (undefined, empty string etc.)
-    if (matches.length > 0 && matches.some(match => !valueMap[match[0]])) {
+    if (matches.length === 0) {
       return '';
     }
   
