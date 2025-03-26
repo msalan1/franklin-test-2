@@ -128,6 +128,7 @@ function buildAnnouncements(block, data) {
 }
 
 export default function decorate(block) {
+    announcements = extractAnnouncements(block);
     window.addEventListener(
         "message",
         (event) => {
@@ -148,8 +149,4 @@ export default function decorate(block) {
     );
   // Add a container class for styling
   block.classList.add('announcements-container');
-
-  // Get all announcement rows
-  announcements = extractAnnouncements(block);
-
 } 
