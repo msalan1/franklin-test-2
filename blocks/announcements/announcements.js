@@ -143,9 +143,6 @@ export default function decorate(block) {
   announcements = extractAnnouncements(block);
 
   block.innerHTML = '';
-  fetchAnnouncementsConfig().then((config) => {
-    buildAnnouncements(block, {}, config.data);
-  });
 
   window.addEventListener(
     'message',
@@ -158,7 +155,9 @@ export default function decorate(block) {
       console.log(event);
       const { data } = event;
       console.log('Data', data);
- 
+      fetchAnnouncementsConfig().then((config) => {
+        buildAnnouncements(block, data, config.data);
+      });
     },
     false,
   );
