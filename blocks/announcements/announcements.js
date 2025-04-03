@@ -50,13 +50,15 @@ function extractButtonTitle(button) {
 function extractAnnouncements(block) {
   const blockAnnouncements = [...block.children];
   const identifiedAnnouncements = blockAnnouncements.map((announcementRow) => {
-    const image = announcementRow.querySelector(':scope > div:first-of-type > picture');
-    const title = announcementRow.querySelector(':scope > div:nth-of-type(2) > h3');
-    const description = announcementRow.querySelectorAll(':scope > div:nth-of-type(2) > :not(h3)');
+    const id = announcementRow.querySelector(':scope > div:first-of-type');
+    const image = announcementRow.querySelector(':scope > div:nth-of-type(2) > picture');
+    const title = announcementRow.querySelector(':scope > div:nth-of-type(3) > h3');
+    const description = announcementRow.querySelectorAll(':scope > div:nth-of-type(3) > :not(h3)');
     const primaryButton = announcementRow.querySelector(':scope > div:last-of-type > p:first-of-type');
     const secondaryButton = announcementRow.querySelector(':scope > div:last-of-type > p:nth-of-type(2)');
 
     return {
+      id: parseInt(id?.textContent, 10) ?? '',
       image: image?.innerHTML ?? '',
       title: title?.textContent ?? '',
       description: description ?? '',
@@ -73,11 +75,20 @@ function extractAnnouncements(block) {
   return identifiedAnnouncements;
 }
 
-function buildAnnouncements(block, data) {
-  block.innerHTML = '';
+function filterActiveAnnouncements(config) {
+  return announcements.filter((announcement) => {
+    const announcementConfig = config.find((cfg) => parseInt(cfg.ID, 10) === announcement.id);
+    if (announcementConfig && announcementConfig.Active === 'on') {
+      return announcement;
+    }
+  });
+}
 
+function buildAnnouncements(block, data, config) {
+  block.innerHTML = '';
+  const filteredAnnouncements = filterActiveAnnouncements(config);
   // Convert each row into an announcement
-  announcements.forEach((row) => {
+  filteredAnnouncements.forEach((row) => {
     // Get the content div (should be the first and only child)
     const announcementContentWrapper = document.createElement('div');
     const announcementImage = document.createElement('div');
@@ -123,18 +134,19 @@ function buildAnnouncements(block, data) {
 }
 
 async function fetchAnnouncementsConfig() {
-  const response = await fetch('https://main--franklin-test-2--msalan1.hlx.page/announcements-config.json');
+  const response = await fetch('/announcements-config.json');
   const data = await response.json();
   return data;
 }
 
 export default function decorate(block) {
   announcements = extractAnnouncements(block);
-  block.innerHTML = '';
 
-  fetchAnnouncementsConfig().then((data) => {
-    console.log('Announcements config', data);
+  block.innerHTML = '';
+  fetchAnnouncementsConfig().then((config) => {
+    buildAnnouncements(block, {}, config.data);
   });
+
   window.addEventListener(
     'message',
     (event) => {
@@ -146,7 +158,7 @@ export default function decorate(block) {
       console.log(event);
       const { data } = event;
       console.log('Data', data);
-      buildAnnouncements(block, data);
+ 
     },
     false,
   );
