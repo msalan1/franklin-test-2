@@ -75,18 +75,27 @@ function extractAnnouncements(block) {
   return identifiedAnnouncements;
 }
 
-function filterActiveAnnouncements(config) {
+function filterActiveAnnouncements(config, data) {
   return announcements.filter((announcement) => {
     const announcementConfig = config.find((cfg) => parseInt(cfg.ID, 10) === announcement.id);
-    if (announcementConfig && announcementConfig.Active === 'on') {
-      return announcement;
+    if (announcementConfig && announcementConfig.Active !== 'on') {
+      return false;
     }
+
+    if (announcementConfig && announcementConfig['Display condition']) {
+      const displayCondition = announcementConfig['Display condition'];
+      console.log('Display condition', displayCondition);
+      const condition = data[displayCondition];
+      console.log('Condition', condition);
+    }
+
+    return announcement;
   });
 }
 
 function buildAnnouncements(block, data, config) {
   block.innerHTML = '';
-  const filteredAnnouncements = filterActiveAnnouncements(config);
+  const filteredAnnouncements = filterActiveAnnouncements(config, data);
   // Convert each row into an announcement
   filteredAnnouncements.forEach((row) => {
     // Get the content div (should be the first and only child)
