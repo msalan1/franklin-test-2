@@ -75,21 +75,105 @@ function extractAnnouncements(block) {
   return identifiedAnnouncements;
 }
 
+/**
+ * Evaluates if an announcement meets a condition
+ * @param {Object} announcement The announcement object to evaluate
+ * @param {string} condition String condition to evaluate
+ * @param {Object} data Data object containing values for condition evaluation
+ * @returns {boolean} True if the condition is met, false otherwise
+ */
+function filterAnnouncementsByCondition(announcement, condition, data) {
+  // Validate input
+  if (!announcement || typeof announcement !== 'object') {
+    console.error('Announcement must be an object');
+    return false;
+  }
+
+  if (typeof condition !== 'string') {
+    console.error('Condition must be a string');
+    return false;
+  }
+
+  // Parse the condition string
+  // Format: "propertyName operator value"
+  // Example: "programId equals 12345"
+  const parts = condition.split(' ');
+  if (parts.length < 3) {
+    console.error('Invalid condition format. Expected: "propertyName operator value"');
+    return false;
+  }
+
+  const propertyName = parts[0];
+  const operator = parts[1];
+  const value = parts.slice(2).join(' '); // Join remaining parts in case value contains spaces
+
+  // Check if the property exists in the data object
+  if (!(propertyName in data)) {
+    console.error(`Property "${propertyName}" not found in data object`);
+    return false;
+  }
+
+  const propertyValue = data[propertyName];
+
+  // Evaluate the condition
+  switch (operator.toLowerCase()) {
+    case 'equals':
+    case '==':
+      return propertyValue === value;
+    case 'notequals':
+    case '!=':
+      return propertyValue !== value;
+    case 'contains':
+      return String(propertyValue).includes(value);
+    case 'notcontains':
+      return !String(propertyValue).includes(value);
+    case 'startswith':
+      return String(propertyValue).startsWith(value);
+    case 'endswith':
+      return String(propertyValue).endsWith(value);
+    case 'greaterthan':
+    case '>':
+      return Number(propertyValue) > Number(value);
+    case 'lessthan':
+    case '<':
+      return Number(propertyValue) < Number(value);
+    case 'greaterthanorequal':
+    case '>=':
+      return Number(propertyValue) >= Number(value);
+    case 'lessthanorequal':
+    case '<=':
+      return Number(propertyValue) <= Number(value);
+    default:
+      console.error(`Unknown operator: ${operator}`);
+      return false;
+  }
+}
+
 function filterActiveAnnouncements(config, data) {
   return announcements.filter((announcement) => {
+    // Find the matching config for this announcement by ID
     const announcementConfig = config.find((cfg) => parseInt(cfg.ID, 10) === announcement.id);
-    if (announcementConfig && announcementConfig.Active !== 'on') {
+
+    // If no config found or announcement is not active, filter it out
+    if (!announcementConfig || announcementConfig.Active !== 'on') {
       return false;
     }
 
-    if (announcementConfig && announcementConfig['Display condition']) {
+    // If there's a display condition, evaluate it
+    if (announcementConfig['Display condition']) {
       const displayCondition = announcementConfig['Display condition'];
       console.log('Display condition', displayCondition);
-      const condition = data[displayCondition];
-      console.log('Condition', condition);
+
+      // Use the filterAnnouncementsByCondition function
+      return filterAnnouncementsByCondition(
+        announcement,
+        displayCondition,
+        data,
+      );
     }
 
-    return announcement;
+    // If no display condition, include the announcement
+    return true;
   });
 }
 
@@ -148,7 +232,7 @@ async function fetchAnnouncementsConfig() {
   return data;
 }
 
-export default function decorate(block) {
+export default async function decorate(block) {
   announcements = extractAnnouncements(block);
 
   block.innerHTML = '';
@@ -156,8 +240,7 @@ export default function decorate(block) {
   window.addEventListener(
     'message',
     (event) => {
-      if (
-        !event.data.experienceLink) {
+      if (!event.data.experienceLink) {
         return;
       }
 
@@ -170,6 +253,7 @@ export default function decorate(block) {
     },
     false,
   );
+
   // Add a container class for styling
   block.classList.add('announcements-container');
 }
