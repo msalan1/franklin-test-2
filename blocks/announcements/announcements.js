@@ -244,7 +244,6 @@ export default async function decorate(block) {
         return;
       }
 
-      console.log(event);
       const { data } = event;
       console.log('Data', data);
       fetchAnnouncementsConfig().then((config) => {
